@@ -120,5 +120,6 @@ public class Player : MonoBehaviour
     {
         // Put projectile collision code here
         Debug.Log($"A projectile was hit {projectile.name}");
+        MainCamera.Shake(1f);
     }
 }
