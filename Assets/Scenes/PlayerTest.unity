@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 1497001}
   - component: {fileID: 1497000}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,7 +279,7 @@ PrefabInstance:
     - target: {fileID: 2055020695088652009, guid: b22e55c821fada64ca39e266ab60ba90,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.6
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 2055020695088652009, guid: b22e55c821fada64ca39e266ab60ba90,
         type: 3}
@@ -319,6 +319,16 @@ PrefabInstance:
     - target: {fileID: 2055020695088652009, guid: b22e55c821fada64ca39e266ab60ba90,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642241713638102048, guid: b22e55c821fada64ca39e266ab60ba90,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642241713638102048, guid: b22e55c821fada64ca39e266ab60ba90,
+        type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
