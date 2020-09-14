@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
         + "Low acceleration values (below 30) will make a character feel slippery, like Luigi in smash bros.")]
     public float acceleration = 100f;
 
+    public int health = 3;
+
     private void Start()
     {
         collider = gameObject.GetComponent<Collider2D>();
@@ -49,6 +51,22 @@ public class Player : MonoBehaviour
         Vector2 targetVelocity = targetInput * speed;
 
         ApplyAcceleration(targetVelocity);
+
+        CheckHealth();
+    }
+
+    private void CheckHealth()
+    {
+        if(health <= 0)
+        {
+            TriggerGameOver();
+        }
+    }
+
+    private void TriggerGameOver()
+    {
+        Debug.Log("Game Over");
+        Destroy(gameObject);
     }
 
     private void ApplyAcceleration(Vector2 targetVelocity)
@@ -118,6 +136,7 @@ public class Player : MonoBehaviour
     /// <param name="projectile"></param>
     private void OnProjectileHit(Projectile projectile)
     {
+        health--;
         // Put projectile collision code here
         Debug.Log($"A projectile was hit {projectile.name}");
         MainCamera.Shake(1f);
