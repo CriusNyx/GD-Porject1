@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
 
     public int health = 3;
 
+    GameObject ship;
+
     private void Start()
     {
         collider = gameObject.GetComponent<Collider2D>();
@@ -41,6 +43,8 @@ public class Player : MonoBehaviour
         {
             throw new System.Exception("The player does not have a 2D rigidbody attached.");
         }
+
+        ship = transform.Find("Ship").gameObject;
     }
 
     private void FixedUpdate()
@@ -53,6 +57,11 @@ public class Player : MonoBehaviour
         ApplyAcceleration(targetVelocity);
 
         CheckHealth();
+
+        if(targetInput.sqrMagnitude > 0.01f)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.back, Quaternion.Euler(0f, 0f, 90f) * targetInput) * Quaternion.Euler(0f, 180f, 0f);
+        }
     }
 
     private void CheckHealth()
