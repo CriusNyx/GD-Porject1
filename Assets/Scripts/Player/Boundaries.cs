@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Boundaries : MonoBehaviour
 {
+    public float width;
+    public float height;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,22 +16,24 @@ public class Boundaries : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        float x = width / 2f;
+        float y = height / 2f;
         Vector3 pos = transform.position;
-        if(pos.x > 10.5)
+        if(pos.x > x)
         {
-            pos.x = 10.5F;
+            pos.x = x;
         }
-        if (pos.x < -10.5F)
+        if (pos.x < -x)
         {
-            pos.x = -10.5F;
+            pos.x = -x;
         }
-        if (pos.y > 5)
+        if (pos.y > y)
         {
-            pos.y = 5;
+            pos.y = y;
         }
-        if (pos.y < -5)
+        if (pos.y < -y)
         {
-            pos.y = -5;
+            pos.y = -y;
         }
         transform.position = pos;
     }

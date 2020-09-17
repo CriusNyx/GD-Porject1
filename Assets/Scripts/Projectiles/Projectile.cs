@@ -9,6 +9,13 @@ public class Projectile : MonoBehaviour
 
     public Vector2 velocity;
 
+    public static int count = 0;
+
+    private void Awake()
+    {
+        count++;
+    }
+
     private void Start()
     {
         collider = gameObject.GetComponent<Collider2D>();
@@ -31,5 +38,11 @@ public class Projectile : MonoBehaviour
 
         // Apply the Delta P to the rigidbody.
         rigidbody.AddForce(deltaP, ForceMode2D.Impulse);
+
+        if(transform.position.magnitude > 40f)
+        {
+            Destroy(gameObject);
+            count--;
+        }
     }
 }
