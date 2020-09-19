@@ -14,10 +14,19 @@ public class Spawner : MonoBehaviour
         priorityQueue = new OrderedBag<(Vector2 offset, float unitAngle, float speed, float delay)>((x, y) => x.delay.CompareTo(y.delay));
     }
 
-    public void Spawn(BulletSpawnDefinition def, Vector2 position, float angle)
+    /// <summary>
+    /// Spawns the bullet pattern defined, and returns the time it will take to finish spawning
+    /// </summary>
+    /// <param name="def"></param>
+    /// <param name="position"></param>
+    /// <param name="angle"></param>
+    /// <returns></returns>
+    public float Spawn(BulletSpawnDefinition def, Vector2 position, float angle)
     {
         var data = def.GetSpawnPattern().Select(x => (x.offset + position, x.unitAngle + angle, x.speed, x.delay + Time.time));
         priorityQueue.AddMany(data);
+
+        return data.Max(x => x.Item4) - Time.time;
     }
 
     private void FixedUpdate()

@@ -44,4 +44,9 @@ public static class SpawnPattern
     {
         return new FanSpawn(new LineSpawn(baseDefinition, linesPerVolley, Vector2.zero, 0f, speedGrowthPerBullet), linesPerVolley, anglePerBullet);
     }
+
+    public static BulletSpawnDefinition Single(float speed)
+    {
+        return new SingleSpawn(new BulletSpawnPos(Vector2.zero, 0f, speed, 0f));
+    }
 }
