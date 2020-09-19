@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -81,6 +82,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Game Over");
         Destroy(gameObject);
+        SceneManager.LoadScene("GameOverMenu");
     }
 
     private void ApplyAcceleration(Vector2 targetVelocity)
