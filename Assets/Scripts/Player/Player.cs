@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -29,7 +30,7 @@ public class Player : MonoBehaviour
 
     public int health = 3;
 
-    GameObject ship;
+    GameObject ship, Health3, Health2, Health1;
 
     private void Start()
     {
@@ -45,6 +46,10 @@ public class Player : MonoBehaviour
         }
 
         ship = transform.Find("Ship").gameObject;
+
+        Health3 = GameObject.Find("Health3").gameObject;
+        Health2 = GameObject.Find("Health2").gameObject;
+        Health1 = GameObject.Find("Health1").gameObject;
     }
 
     private void FixedUpdate()
@@ -146,8 +151,34 @@ public class Player : MonoBehaviour
     private void OnProjectileHit(Projectile projectile)
     {
         health--;
+        if (health == 3)
+        {
+            Health3.SetActive(true);
+            Health2.SetActive(true);
+            Health1.SetActive(true);
+        }
+        if (health == 2)
+        {
+            Health3.SetActive(false);
+            Health2.SetActive(true);
+            Health1.SetActive(true);
+        }
+        if (health == 1)
+        {
+            Health3.SetActive(false);
+            Health2.SetActive(false);
+            Health1.SetActive(true);
+
+        }
+        if (health == 0)
+        {
+            Health3.SetActive(false);
+            Health2.SetActive(false);
+            Health1.SetActive(false);
+        }
         // Put projectile collision code here
         Debug.Log($"A projectile was hit {projectile.name}");
         MainCamera.Shake(1f);
+        
     }
 }
