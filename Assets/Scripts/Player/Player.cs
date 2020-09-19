@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
 
         if(targetInput.sqrMagnitude > 0.01f)
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.back, Quaternion.Euler(0f, 0f, 90f) * targetInput) * Quaternion.Euler(0f, 180f, 0f);
+            ship.transform.rotation = Quaternion.LookRotation(-Vector3.back, Quaternion.Euler(0f, 0f, 90f) * targetInput) * Quaternion.Euler(0f, 180f, 0f);
         }
     }
 
