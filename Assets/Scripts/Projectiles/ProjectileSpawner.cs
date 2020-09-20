@@ -9,7 +9,7 @@ public class ProjectileSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float expectedBulletCount = 5f * Mathf.Pow(1.05f, Time.timeSinceLevelLoad);
+        float expectedBulletCount = 5f * Mathf.Pow(1.05f, Time.time);
         while(bulletCount < expectedBulletCount)
         {
             bulletCount++;
