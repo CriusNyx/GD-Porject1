@@ -79,8 +79,11 @@ public class Player : MonoBehaviour
     private void TriggerGameOver()
     {
         Debug.Log("Game Over");
+
         Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
         Destroy(gameObject);
+
+        // Creates explosion
         Instantiate(explosion, pos, transform.rotation);
     }
 
