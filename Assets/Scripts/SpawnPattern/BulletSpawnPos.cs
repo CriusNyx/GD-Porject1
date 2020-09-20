@@ -11,7 +11,7 @@ public struct BulletSpawnPos
         speed,
         delay;
 
-    public BulletSpawnPos(Vector2 offset, float unitAngle, float speed, float delay)
+    public BulletSpawnPos(Vector2 offset = default, float unitAngle = 0f, float speed = 1f, float delay = 0f)
     {
         this.offset = offset;
         this.unitAngle = unitAngle;

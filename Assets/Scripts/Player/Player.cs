@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     new Collider2D collider;
     new Rigidbody2D rigidbody;
 
+    int fixedFrameCount = 0;
+
     /// <summary>
     /// The speed value of the character.
     /// Higher values will create faster characters that are more difficult to control.
@@ -33,6 +35,9 @@ public class Player : MonoBehaviour
 
     GameObject ship, Health3, Health2, Health1;
 
+    Spawner spawner;
+    BulletSpawnDefinition bullet;
+
     private void Start()
     {
         collider = gameObject.GetComponent<Collider2D>();
@@ -51,6 +56,11 @@ public class Player : MonoBehaviour
         Health3 = GameObject.Find("Health3").gameObject;
         Health2 = GameObject.Find("Health2").gameObject;
         Health1 = GameObject.Find("Health1").gameObject;
+
+        spawner = gameObject.GetComponent<Spawner>();
+        bullet = new PatternSpawn(0f, 
+            new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.left * 0.2f + Vector2.down * 0.1f, 0f), 
+            new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.right * 0.2f + Vector2.down * 0.1f, 0f));
     }
 
     private void FixedUpdate()
@@ -68,6 +78,13 @@ public class Player : MonoBehaviour
         {
             ship.transform.rotation = Quaternion.LookRotation(-Vector3.back, Quaternion.Euler(0f, 0f, 90f) * targetInput) * Quaternion.Euler(0f, 180f, 0f);
         }
+
+        if (Input.GetKey(KeyCode.Space) && (fixedFrameCount % 3 == 1 || fixedFrameCount % 2 == 1))
+        {
+            spawner.Spawn(bullet, transform.position, 90f);
+        }
+
+        fixedFrameCount++;
     }
 
     private void CheckHealth()
