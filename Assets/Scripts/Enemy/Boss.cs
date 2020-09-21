@@ -9,10 +9,34 @@ public class Boss : MonoBehaviour
     public GameObject ringPrefab;
     private GameObject[] rings;
     public GameObject player;
+    public GameObject body;
 
     public bool alive = true;
 
     new private Rigidbody2D rigidbody;
+
+    private const float PERLIN_NOISE_X_OFFSET = 1000f;
+    private const float PERLIN_NOISE_Y_OFFSET = 10000000f;
+
+    private float currentScreenShake = 0f;
+
+    /// <summary>
+    /// How many units of screen shake intensity 1 will produce
+    /// </summary>
+    [Tooltip("How many unity units of screen shake intensity 1 will produce.")]
+    public float screenShakeMagnitude = 1f;
+
+    /// <summary>
+    /// How many units per second screen shake will decay by
+    /// </summary>
+    [Tooltip("How many units per second screen shake will decay by.")]
+    public float screenShakeDecay = 2f;
+
+    /// <summary>
+    /// Determines how violent the screen shake will appear.
+    /// </summary>
+    [Tooltip("Determines how violent the screen shake will appear.")]
+    public float screenShakeSpeed = 20f;
 
     public void Start()
     {
@@ -47,6 +71,8 @@ public class Boss : MonoBehaviour
 
         Difficulty.SetBaseDifficultyLevel(Difficulty.DifficultyLevel.VeryHard);
 
+        body = transform.Find("Body").gameObject;
+
         StartCoroutine(Logic());
     }
 
@@ -63,6 +89,7 @@ public class Boss : MonoBehaviour
 
             rings[i].transform.localRotation *= Quaternion.Euler(x * 30 * Time.deltaTime, y * 30 * Time.deltaTime, z * 30 * Time.deltaTime);
         }
+        UpdateScreenShake();
     }
 
     private IEnumerator Logic()
@@ -96,10 +123,37 @@ public class Boss : MonoBehaviour
         }
     }
 
+    private void UpdateScreenShake()
+    {
+        // Determine how far the camera should be shaking currently
+        // Squaring the currentScreenShake value will cause smoother transitions into and out of screen shake
+        float currentMagnitude = currentScreenShake * currentScreenShake * screenShakeMagnitude;
+
+        // Make sure magnitude doesn't go below 0
+        currentMagnitude = Mathf.Max(currentMagnitude, 0f);
+
+        // Get the current x and y offset using perlin noise
+        // the * 2 - 1 function at the end will remap the output from [0, 1] -> [-1, 1]
+        float xOffset = Mathf.PerlinNoise(screenShakeSpeed * Time.time, PERLIN_NOISE_X_OFFSET) * 2f - 1f;
+        float yOffset = Mathf.PerlinNoise(screenShakeSpeed * Time.time, PERLIN_NOISE_Y_OFFSET) * 2f - 1f;
+
+        // Apply screenshake to camera
+        body.transform.localPosition = new Vector2(xOffset, yOffset) * currentMagnitude;
+
+        // Decay current screen shake value
+        currentScreenShake -= Time.deltaTime * screenShakeDecay;
+        currentScreenShake = Mathf.Max(0f, currentScreenShake);
+    }
+
+    public void Shake(float value)
+    {
+        currentScreenShake = Mathf.Max(currentScreenShake, value, 0f);
+    }
+
     private IEnumerator Move(float speed = 50f)
     {
         float x = Random.Range(-10f, 10f);
-        float y = 10f;
+        float y = 8f;
         Vector2 target = new Vector2(x, y);
         while (Vector2.Distance(transform.position, target) > 0.1f)
         {

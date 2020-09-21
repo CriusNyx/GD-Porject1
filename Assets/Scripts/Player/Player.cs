@@ -196,7 +196,6 @@ public class Player : MonoBehaviour
             Health1.SetActive(false);
         }
         // Put projectile collision code here
-        Debug.Log($"A projectile was hit {projectile.name}");
         MainCamera.Shake(1f);
         
     }
