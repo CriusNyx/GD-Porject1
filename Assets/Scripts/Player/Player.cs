@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -33,7 +31,11 @@ public class Player : MonoBehaviour
 
     public int health = 3;
 
-    GameObject ship, Health3, Health2, Health1;
+    public GameObject explosion;
+
+    GameObject ship;
+
+
 
     Spawner spawner;
     BulletSpawnDefinition bullet;
@@ -52,7 +54,7 @@ public class Player : MonoBehaviour
         }
 
         ship = transform.Find("Ship").gameObject;
-
+        
         Health3 = GameObject.Find("Health3").gameObject;
         Health2 = GameObject.Find("Health2").gameObject;
         Health1 = GameObject.Find("Health1").gameObject;
@@ -98,8 +100,12 @@ public class Player : MonoBehaviour
     private void TriggerGameOver()
     {
         Debug.Log("Game Over");
+
+        Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
         Destroy(gameObject);
-        SceneManager.LoadScene("GameOverMenu");
+
+        // Creates explosion
+        Instantiate(explosion, pos, transform.rotation);
     }
 
     private void ApplyAcceleration(Vector2 targetVelocity)
@@ -170,33 +176,14 @@ public class Player : MonoBehaviour
     private void OnProjectileHit(Projectile projectile)
     {
         health--;
-        if (health == 3)
-        {
-            Health3.SetActive(true);
-            Health2.SetActive(true);
-            Health1.SetActive(true);
-        }
-        if (health == 2)
-        {
-            Health3.SetActive(false);
-            Health2.SetActive(true);
-            Health1.SetActive(true);
-        }
-        if (health == 1)
-        {
-            Health3.SetActive(false);
-            Health2.SetActive(false);
-            Health1.SetActive(true);
-
-        }
-        if (health == 0)
-        {
-            Health3.SetActive(false);
-            Health2.SetActive(false);
-            Health1.SetActive(false);
-        }
         // Put projectile collision code here
         MainCamera.Shake(1f);
+
+        // Destroys projectile and creates explosion
+        Vector3 pos = new Vector3(projectile.transform.position.x, projectile.transform.position.y, projectile.transform.position.z);
         
+        Destroy(projectile.gameObject);
+        Instantiate(explosion, pos, transform.rotation);
+
     }
 }
