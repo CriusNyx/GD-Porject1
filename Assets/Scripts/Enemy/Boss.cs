@@ -20,6 +20,8 @@ public class Boss : MonoBehaviour
 
     private float currentScreenShake = 0f;
 
+    public bool isPhase2 = false;
+
     /// <summary>
     /// How many units of screen shake intensity 1 will produce
     /// </summary>
@@ -68,8 +70,6 @@ public class Boss : MonoBehaviour
         rings = new GameObject[] { ring1, ring2, ring3 };
 
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
-
-        Difficulty.SetBaseDifficultyLevel(Difficulty.DifficultyLevel.VeryHard);
 
         body = transform.Find("Body").gameObject;
 
