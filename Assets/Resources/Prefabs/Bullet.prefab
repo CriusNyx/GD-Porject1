@@ -132,3 +132,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: -1, y: 0}
+  explosion: {fileID: 807366499612707531, guid: b019560605f56dc49bb599419672391a,
+    type: 3}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Player : MonoBehaviour
     new Rigidbody2D rigidbody;
 
     int fixedFrameCount = 0;
+
+    bool alive = true;
 
     /// <summary>
     /// The speed value of the character.
@@ -35,16 +38,18 @@ public class Player : MonoBehaviour
 
     GameObject ship;
 
-
+    GameObject Health1, Health2, Health3;
 
     Spawner spawner;
     BulletSpawnDefinition bullet;
+
+    private float invincibleUntil = -1f;
 
     private void Start()
     {
         collider = gameObject.GetComponent<Collider2D>();
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
-        if(collider == null)
+        if (collider == null)
         {
             throw new System.Exception("The player does not have a 2D collider attached.");
         }
@@ -54,19 +59,22 @@ public class Player : MonoBehaviour
         }
 
         ship = transform.Find("Ship").gameObject;
-        
+
         Health3 = GameObject.Find("Health3").gameObject;
         Health2 = GameObject.Find("Health2").gameObject;
         Health1 = GameObject.Find("Health1").gameObject;
 
         spawner = gameObject.GetComponent<Spawner>();
-        bullet = new PatternSpawn(0f, 
-            new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.left * 0.2f + Vector2.down * 0.1f, 0f), 
+        bullet = new PatternSpawn(0f,
+            new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.left * 0.2f + Vector2.down * 0.1f, 0f),
             new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.right * 0.2f + Vector2.down * 0.1f, 0f));
     }
 
     private void FixedUpdate()
     {
+        if (!alive)
+            return;
+
         Vector2 targetInput = GetInput();
 
         // Scale the input by the speed value to get the target velocity.
@@ -76,7 +84,7 @@ public class Player : MonoBehaviour
 
         CheckHealth();
 
-        if(targetInput.sqrMagnitude > 0.01f)
+        if (targetInput.sqrMagnitude > 0.01f)
         {
             ship.transform.rotation = Quaternion.LookRotation(-Vector3.back, Quaternion.Euler(0f, 0f, 90f) * targetInput) * Quaternion.Euler(0f, 180f, 0f);
         }
@@ -91,7 +99,7 @@ public class Player : MonoBehaviour
 
     private void CheckHealth()
     {
-        if(health <= 0)
+        if (health <= 0)
         {
             TriggerGameOver();
         }
@@ -102,10 +110,22 @@ public class Player : MonoBehaviour
         Debug.Log("Game Over");
 
         Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
-        Destroy(gameObject);
-
         // Creates explosion
         Instantiate(explosion, pos, transform.rotation);
+
+        alive = false;
+        foreach(var renderer in GetComponentsInChildren<MeshRenderer>())
+        {
+            Destroy(renderer);
+        }
+
+        StartCoroutine(LoadGameOverScreen());
+    }
+
+    private IEnumerator LoadGameOverScreen()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("gameOverMenu");
     }
 
     private void ApplyAcceleration(Vector2 targetVelocity)
@@ -163,7 +183,7 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Projectile projectile = collision.GetComponent<Projectile>();
-        if (projectile != null)
+        if (projectile != null && Time.time > invincibleUntil)
         {
             OnProjectileHit(projectile);
         }
@@ -176,14 +196,49 @@ public class Player : MonoBehaviour
     private void OnProjectileHit(Projectile projectile)
     {
         health--;
+
+        invincibleUntil = Time.time + 1f;
+
+        SetHealthIcons();
+
         // Put projectile collision code here
         MainCamera.Shake(1f);
 
         // Destroys projectile and creates explosion
         Vector3 pos = new Vector3(projectile.transform.position.x, projectile.transform.position.y, projectile.transform.position.z);
-        
-        Destroy(projectile.gameObject);
-        Instantiate(explosion, pos, transform.rotation);
 
+        Destroy(projectile.gameObject);
+        //Instantiate(explosion, pos, transform.rotation);
+
+        projectile.Explode();
+    }
+
+    private void SetHealthIcons()
+    {
+        if (health == 3)
+        {
+            Health3.SetActive(true);
+            Health2.SetActive(true);
+            Health1.SetActive(true);
+        }
+        if (health == 2)
+        {
+            Health3.SetActive(false);
+            Health2.SetActive(true);
+            Health1.SetActive(true);
+        }
+        if (health == 1)
+        {
+            Health3.SetActive(false);
+            Health2.SetActive(false);
+            Health1.SetActive(true);
+
+        }
+        if (health == 0)
+        {
+            Health3.SetActive(false);
+            Health2.SetActive(false);
+            Health1.SetActive(false);
+        }
     }
 }

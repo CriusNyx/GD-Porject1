@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1238077733126671361}
   - component: {fileID: 6266675701528137054}
   - component: {fileID: 5596565763681146201}
-  - component: {fileID: 131645833734919412}
+  - component: {fileID: -7885515527510744057}
   m_Layer: 0
-  m_Name: Explosion
+  m_Name: SmallExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -976,7 +976,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 50
+        scalar: 1
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -4813,7 +4813,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &131645833734919412
+--- !u!114 &-7885515527510744057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

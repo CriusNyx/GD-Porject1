@@ -11,6 +11,8 @@ public class Projectile : MonoBehaviour
 
     public static int count = 0;
 
+    public GameObject explosion;
+
     private void Awake()
     {
         count++;
@@ -44,5 +46,10 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
             count--;
         }
+    }
+
+    public void Explode()
+    {
+        Instantiate(explosion, transform.position, transform.rotation);
     }
 }
