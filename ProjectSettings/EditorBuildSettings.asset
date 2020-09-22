@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EnemyBehaviourDebug.unity
     guid: 84df40140bf782347a5cd0d36d1d4b1b
+  - enabled: 1
+    path: Assets/Scenes/WInMenu.unity
+    guid: 7f9ff693e4a8cf444ad2e6f2c245411e
   m_configObjects: {}
