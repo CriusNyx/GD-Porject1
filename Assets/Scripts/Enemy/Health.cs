@@ -12,11 +12,13 @@ public class Health : MonoBehaviour
     public static int phase2Count = 0;
 
     GameObject sound;
+    GameObject deathSound;
 
     public void Start()
     {
         boss = gameObject.GetComponent<Boss>();
         sound = Resources.Load<GameObject>("Prefabs/BossDamage");
+        deathSound = Resources.Load<GameObject>("Prefabs/Death");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -27,11 +29,11 @@ public class Health : MonoBehaviour
         {
             health--;
             Instantiate(sound);
-
             Destroy(collision.gameObject);
 
             if (health == 0)
             {
+                Instantiate(deathSound);
                 Destroy(gameObject);
                 if (boss != null)
                 {
@@ -80,11 +82,6 @@ public class Health : MonoBehaviour
 
     private void Win()
     {
-        Debug.Log("Win");
-       
-        SceneManager.LoadScene("WinMenu");
+        new GameObject("Win").AddComponent<Win>();
     }
-
-
-
 }
