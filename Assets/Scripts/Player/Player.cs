@@ -119,6 +119,11 @@ public class Player : MonoBehaviour
             Destroy(renderer);
         }
 
+        foreach(var system in GetComponentsInChildren<ParticleSystem>())
+        {
+            Destroy(system.gameObject);
+        }
+
         StartCoroutine(LoadGameOverScreen());
     }
 
