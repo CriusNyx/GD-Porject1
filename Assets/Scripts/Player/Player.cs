@@ -43,7 +43,13 @@ public class Player : MonoBehaviour
     Spawner spawner;
     BulletSpawnDefinition bullet;
 
+    GameObject damageSound;
+
     private float invincibleUntil = -1f;
+
+    GameObject fireSound;
+
+    GameObject deathSound;
 
     private void Start()
     {
@@ -68,6 +74,10 @@ public class Player : MonoBehaviour
         bullet = new PatternSpawn(0f,
             new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.left * 0.2f + Vector2.down * 0.1f, 0f),
             new LineSpawn(SpawnPattern.Single(10f), 3, Vector2.right * 0.2f + Vector2.down * 0.1f, 0f));
+
+        fireSound = Resources.Load<GameObject>("Prefabs/Laser");
+        damageSound = Resources.Load<GameObject>("Prefabs/PlayerDamage");
+        deathSound = Resources.Load<GameObject>("Prefabs/Death");
     }
 
     private void FixedUpdate()
@@ -92,6 +102,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && (fixedFrameCount % 3 == 1 || fixedFrameCount % 2 == 1))
         {
             spawner.Spawn(bullet, transform.position, 90f);
+            Instantiate(fireSound);
         }
 
         fixedFrameCount++;
@@ -107,11 +118,11 @@ public class Player : MonoBehaviour
 
     private void TriggerGameOver()
     {
-        Debug.Log("Game Over");
-
         Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
         // Creates explosion
         Instantiate(explosion, pos, transform.rotation);
+
+        Instantiate(deathSound);
 
         alive = false;
         foreach(var renderer in GetComponentsInChildren<MeshRenderer>())
@@ -201,6 +212,8 @@ public class Player : MonoBehaviour
     private void OnProjectileHit(Projectile projectile)
     {
         health--;
+
+        Instantiate(damageSound);
 
         invincibleUntil = Time.time + 1f;
 
